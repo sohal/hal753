@@ -1,0 +1,48 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "mcu",
+      "hidden": true,
+      "cacheVariables": {
+        "CORTEX_TYPE": "CM7F",
+        "STM32_TYPE": "h7",
+        "STM32_DEVICE": "STM32H753xx",
+        "FLOAT_ABI": "hard",
+        "FPU": "fpv5-d16",
+        "BOARD_TYPE": "nucleo-h753"
+      }
+    },
+    {
+      "name": "toolchain-gnuarm",
+      "hidden": true,
+      "toolchainFile": "${sourceDir}/_deps/cmake_scripts-src/toolchains/gcc_arm_none_eabi_cortex_m.cmake"
+    },
+    {
+      "name": "toolchain-armclang",
+      "hidden": true,
+      "toolchainFile": "${sourceDir}/_deps/cmake_scripts-src/toolchains/arm_clang_cortex_m.cmake"
+    },
+    {
+      "name": "debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "minsizerel",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    }
+  ]
+}

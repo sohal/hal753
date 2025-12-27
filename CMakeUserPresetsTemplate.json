@@ -1,0 +1,12 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "local-gnuarm14.3",
+      "hidden": true,
+      "environment": {
+        "COMPILER_ROOT_PATH": "/home/kdev/gnuarm14.3"
+      }
+    }
+  ]
+}

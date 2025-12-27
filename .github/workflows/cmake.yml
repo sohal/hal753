@@ -1,0 +1,67 @@
+name: CMake Build
+
+on:
+  push:
+    branches: [main, develop]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/kodezine/kdocker:latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [hal-gnuarm14.3, hal-armclang21.1]
+        build-type: [Debug, Release]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for git tags
+      
+      - name: Configure CMake
+        run: |
+          cmake --preset ${{ matrix.preset }}${{ matrix.build-type == 'Release' && '-release' || '' }}
+      
+      - name: Build
+        run: |
+          cmake --build --preset ${{ matrix.preset }}${{ matrix.build-type == 'Release' && '-release' || '' }}
+      
+      - name: Package
+        run: |
+          cpack --preset ${{ matrix.preset }}${{ matrix.build-type == 'Release' && '-release' || '' }}
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nucleo-hal-${{ matrix.preset }}-${{ matrix.build-type }}
+          path: build/${{ matrix.preset }}${{ matrix.build-type == 'Release' && '-release' || '' }}/*.tar.gz
+          retention-days: 7
+  
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: packages
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: packages/**/*.tar.gz
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

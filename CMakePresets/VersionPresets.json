@@ -1,0 +1,13 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "version",
+      "hidden": true,
+      "cacheVariables": {
+        "GITHUB_BRANCH_toolchain": "v1.0.7.4",
+        "GITHUB_BRANCH_stm32cubeh7": "v1.12.1"
+      }
+    }
+  ]
+}
