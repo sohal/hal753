@@ -1,109 +1,55 @@
 {
-  "version": 6,
-  "configurePresets": [
-    {
-      "name": "hal-gnuarm14.3",
-      "displayName": "HAL GCC ARM 14.3 (Debug)",
-      "description": "Nucleo H753 HAL build with ARM GCC 14.3",
-      "inherits": [
-        "version",
-        "mcu",
-        "toolchain-gnuarm",
-        "debug"
-      ],
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/hal-gnuarm14.3"
+    "version": 10,
+    "cmakeMinimumRequired": {
+        "major": 4,
+        "minor": 0,
+        "patch": 0
     },
-    {
-      "name": "hal-gnuarm14.3-release",
-      "displayName": "HAL GCC ARM 14.3 (Release)",
-      "description": "Nucleo H753 HAL build with ARM GCC 14.3",
-      "inherits": [
-        "version",
-        "mcu",
-        "toolchain-gnuarm",
-        "release"
-      ],
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/hal-gnuarm14.3-release"
-    },
-    {
-      "name": "hal-armclang21.1",
-      "displayName": "HAL ARM Clang 21.1 (Debug)",
-      "description": "Nucleo H753 HAL build with ARM Clang 21.1",
-      "inherits": [
-        "version",
-        "mcu",
-        "toolchain-armclang",
-        "debug"
-      ],
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/hal-armclang21.1"
-    },
-    {
-      "name": "hal-armclang21.1-release",
-      "displayName": "HAL ARM Clang 21.1 (Release)",
-      "description": "Nucleo H753 HAL build with ARM Clang 21.1",
-      "inherits": [
-        "version",
-        "mcu",
-        "toolchain-armclang",
-        "release"
-      ],
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/hal-armclang21.1-release"
-    }
-  ],
-  "buildPresets": [
-    {
-      "name": "hal-gnuarm14.3",
-      "displayName": "Build HAL GCC ARM 14.3 (Debug)",
-      "configurePreset": "hal-gnuarm14.3",
-      "configuration": "Debug"
-    },
-    {
-      "name": "hal-gnuarm14.3-release",
-      "displayName": "Build HAL GCC ARM 14.3 (Release)",
-      "configurePreset": "hal-gnuarm14.3-release",
-      "configuration": "Release"
-    },
-    {
-      "name": "hal-armclang21.1",
-      "displayName": "Build HAL ARM Clang 21.1 (Debug)",
-      "configurePreset": "hal-armclang21.1",
-      "configuration": "Debug"
-    },
-    {
-      "name": "hal-armclang21.1-release",
-      "displayName": "Build HAL ARM Clang 21.1 (Release)",
-      "configurePreset": "hal-armclang21.1-release",
-      "configuration": "Release"
-    }
-  ],
-  "packagePresets": [
-    {
-      "name": "hal-gnuarm14.3",
-      "displayName": "Package HAL GCC ARM 14.3",
-      "configurePreset": "hal-gnuarm14.3",
-      "generators": ["TGZ"]
-    },
-    {
-      "name": "hal-gnuarm14.3-release",
-      "displayName": "Package HAL GCC ARM 14.3 (Release)",
-      "configurePreset": "hal-gnuarm14.3-release",
-      "generators": ["TGZ"]
-    },
-    {
-      "name": "hal-armclang21.1",
-      "displayName": "Package HAL ARM Clang 21.1",
-      "configurePreset": "hal-armclang21.1",
-      "generators": ["TGZ"]
-    },
-    {
-      "name": "hal-armclang21.1-release",
-      "displayName": "Package HAL ARM Clang 21.1 (Release)",
-      "configurePreset": "hal-armclang21.1-release",
-      "generators": ["TGZ"]
-    }
-  ]
+    "include": [
+        "HiddenPresets.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "board-nucleo-h753",
+            "hidden":  true,
+            "description": "Base preset for Nucleo H753 static lib builds",
+            "cacheVariables": {
+                "BOARD_TYPE": "nucleo-h753"
+            }
+        },
+        {
+            "inherits":[
+                "debug",
+                "mcu",
+                "gnuarm14.3",
+                "board-nucleo-h753"
+            ],
+            "name": "nucleo-h753-hal-gnuarm14.3",
+            "hidden": false,
+            "displayName": "nucleo-h753 hal static lib with arm gcc 14.3 docker",
+            "description": "nucleo-h753 hal static lib with arm gcc 14.3 docker"
+        },
+        {
+            "inherits":[
+                "debug",
+                "mcu",
+                "atfe21.1",
+                "board-nucleo-h753"
+            ],
+            "name": "nucleo-h753-hal-atfe21.1",
+            "hidden": false,
+            "displayName": "nucleo-h753 hal static lib with ATfE 21.1 docker",
+            "description": "nucleo-h753 hal static lib with ATfE 21.1 docker"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "nucleo-h753-hal-gnuarm14.3",
+            "configurePreset": "nucleo-h753-hal-gnuarm14.3"
+        },
+        {
+            "name": "nucleo-h753-hal-atfe21.1",
+            "configurePreset": "nucleo-h753-hal-atfe21.1"
+        }
+    ]
 }
