@@ -15,7 +15,7 @@
                 "GITHUB_BRANCH_cpm_SHA256": "2020b4fc42dba44817983e06342e682ecfc3d2f484a581f11cc5731fbe4dce8a",
                 "GITHUB_BRANCH_toolchain": "v1.0.7.4",
                 "GITHUB_BRANCH_toolchain_SHA256": "160ff8d295c1567aeeb01f17e53a66477fffad5330d97c2c0a2cb0015c494132",
-                "GITHUB_BRANCH_stm32cubeh7": "v1.12.1"
+                "GITHUB_BRANCH_stm32cubeh7": "1.12.1"
             }
         }
     ]

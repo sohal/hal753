@@ -17,9 +17,6 @@
             "generator": "Ninja",
             "environment": {
                 "COMPILER_ROOT_PATH": "$env{HOME}/gnuarm14.3"
-            },
-            "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/_deps/cmake_scripts-src/toolchains/arm_none_eabi_gcc.cmake"
             }
 
         },

@@ -25,23 +25,37 @@ else()
     set(VERSION_PATCH 1)
 endif()
 
+# set the location of all fetched dependencies
+set(FETCHCONTENT_BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/_deps")
+
+# download cpm.cmake
+file(
+    DOWNLOAD
+    https://github.com/cpm-cmake/CPM.cmake/releases/download/${GITHUB_BRANCH_cpm}/CPM.cmake
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake"
+    EXPECTED_HASH SHA256=${GITHUB_BRANCH_cpm_SHA256}
+)
+
+include(cmake/CPM.cmake)
+include(cmake/deps.toolchain.cmake)
+
+# Set environment variable for toolchain if CORTEX_TYPE cache variable is defined
+if(DEFINED CORTEX_TYPE)
+    set(ENV{CORTEX_TYPE} ${CORTEX_TYPE})
+endif()
+
+# Set the toolchain file after cmake_scripts is fetched
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    set(CMAKE_TOOLCHAIN_FILE ${cmake_scripts_SOURCE_DIR}/toolchains/arm_none_eabi_gcc.cmake)
+endif()
+
 project(nucleo-hal
     VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
     LANGUAGES C ASM
 )
 
-# Download CPM.cmake
-file(
-    DOWNLOAD
-    https://github.com/cpm-cmake/CPM.cmake/releases/download/${GITHUB_BRANCH_cpm}/CPM.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake
-    EXPECTED_HASH SHA256=${EXPECTED_HASH_cpm}
-)
-include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
-
-# Include dependency files
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/deps.toolchain.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/deps.stm32cubeh7.cmake)
+# Include STM32Cube dependency
+include(cmake/deps.stm32cubeh7.cmake)
 
 # Extract STM32CubeH7 version from preset variable
 string(REGEX REPLACE "^v" "" stm32cubeh7_VERSION "${GITHUB_BRANCH_stm32cubeh7}")

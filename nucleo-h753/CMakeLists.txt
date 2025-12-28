@@ -121,13 +121,14 @@ target_sources(nucleo-h753
 )
 
 # Generate GPIO structures from CubeMX main.h
-include(${cmake_scripts_SOURCE_DIR}/utilities/gpioStructs.cmake)
-generateGpioStructsFromCubeMx(
-    VENDOR st
-    MCU_FAMILY STM32${UPPERCASE_STM32_TYPE}
-    MAIN_H_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc/main.h
-    GENERATED_FILE GPIO_STRUCT_GENERATED_HEADER
-)
+# NOTE: This utility is not available in cmake_scripts v1.0.7.4
+# include(${cmake_scripts_SOURCE_DIR}/utilities/gpioStructs.cmake)
+# generateGpioStructsFromCubeMx(
+#     VENDOR st
+#     MCU_FAMILY STM32${UPPERCASE_STM32_TYPE}
+#     MAIN_H_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc/main.h
+#     GENERATED_FILE GPIO_STRUCT_GENERATED_HEADER
+# )
 
 target_sources(nucleo-h753
     PRIVATE
