@@ -72,6 +72,9 @@ build/
 *.swp
 *.swo
 *~
+# ide
+[Dd]ebug
+.settings*
 
 # OS
 .DS_Store
