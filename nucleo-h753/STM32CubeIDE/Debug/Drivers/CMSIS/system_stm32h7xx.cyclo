@@ -1,0 +1,3 @@
+/Volumes/repo/sohal/kodezine/hal753/nucleo-h753/Core/Src/system_stm32h7xx.c:180:6:SystemInit	5
+/Volumes/repo/sohal/kodezine/hal753/nucleo-h753/Core/Src/system_stm32h7xx.c:354:6:SystemCoreClockUpdate	10
+/Volumes/repo/sohal/kodezine/hal753/nucleo-h753/Core/Src/system_stm32h7xx.c:476:6:ExitRun0Mode	2

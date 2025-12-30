@@ -68,8 +68,8 @@ void application_init(void);
 #define STLINK_RX_GPIO_Port GPIOD
 #define STLINK_TX_Pin GPIO_PIN_9
 #define STLINK_TX_GPIO_Port GPIOD
-#define LDBlue_Pin GPIO_PIN_7
-#define LDBlue_GPIO_Port GPIOB
+#define LDYellow_Pin GPIO_PIN_1
+#define LDYellow_GPIO_Port GPIOE
 
 /* USER CODE BEGIN Private defines */
 
