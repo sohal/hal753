@@ -11,7 +11,7 @@ set_target_properties(nucleo::h753 PROPERTIES
 # Provide package variables
 set(NUCLEO_FOUND TRUE)
 set(NUCLEO_VERSION "@PROJECT_VERSION@")
-set(NUCLEO_INCLUDE_DIRS 
+set(NUCLEO_INCLUDE_DIRS
     "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/nucleo"
     "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/stm32cubeh7"
 )

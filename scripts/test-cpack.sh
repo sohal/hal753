@@ -130,10 +130,10 @@ echo "  ✓ Found $STM32_HEADERS STM32Cube header files"
 if command -v cmake &> /dev/null; then
     echo ""
     echo "[Bonus] Testing CMake integration..."
-    
+
     TEST_PROJECT="$TEMP_DIR/test_project"
     mkdir -p "$TEST_PROJECT"
-    
+
     cat > "$TEST_PROJECT/CMakeLists.txt" << EOF
 cmake_minimum_required(VERSION 3.25)
 project(test_integration)

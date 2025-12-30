@@ -57,10 +57,19 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define Button_Pin GPIO_PIN_13
+#define Button_GPIO_Port GPIOC
+#define Button_EXTI_IRQn EXTI15_10_IRQn
+#define LDGreen_Pin GPIO_PIN_0
+#define LDGreen_GPIO_Port GPIOB
+#define LDRed_Pin GPIO_PIN_14
+#define LDRed_GPIO_Port GPIOB
 #define STLINK_RX_Pin GPIO_PIN_8
 #define STLINK_RX_GPIO_Port GPIOD
 #define STLINK_TX_Pin GPIO_PIN_9
 #define STLINK_TX_GPIO_Port GPIOD
+#define LDBlue_Pin GPIO_PIN_7
+#define LDBlue_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
