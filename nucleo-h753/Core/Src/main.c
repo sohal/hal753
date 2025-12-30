@@ -61,7 +61,13 @@ static void MX_CRYP_Init(void);
 static void MX_HASH_Init(void);
 static void MX_RNG_Init(void);
 /* USER CODE BEGIN PFP */
-
+__attribute__((weak)) void application_init(void)
+{
+  /* Prevent unused argument(s) compilation warning */
+  /* NOTE: This function should not be modified, when the callback is needed,
+           the application_init could be implemented in the user file
+   */
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -103,7 +109,7 @@ int main(void)
   MX_HASH_Init();
   MX_RNG_Init();
   /* USER CODE BEGIN 2 */
-
+  application_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
