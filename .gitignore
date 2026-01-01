@@ -84,5 +84,6 @@ Thumbs.db
 **/generated/gpio_struct.h
 **/generated/gpio_struct.c
 nucleo-h753/**/generated/
-
+# stm32cubeide
+nucleo-h753/STM32CubeIDE
 CMakeUserPresets.json
