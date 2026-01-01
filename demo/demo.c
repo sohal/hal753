@@ -5,6 +5,9 @@
  *      Author: s
  */
 #include "demo.h"
+
+#include "lwip.h"
+
 #include <stdbool.h>
 #include "stm32h7xx_hal.h"
 #define BSP_TICKS_PER_SEC    100U
@@ -26,6 +29,7 @@ typedef struct {
     //...
 } Blinky;
 extern Blinky Blinky_inst; // Blinky instance declaration
+extern struct netif gnetif; // for lwip
 void Blinky_ctor(void);
 //----------------------------------------------------------------------------
 Blinky Blinky_inst; // the Blinky AO instance definition
@@ -41,6 +45,11 @@ void BSP_ledOff(void) {
 }
 void application_init(void)
 {
+	do {
+		ethernetif_input(&gnetif);
+		sys_check_timeouts();
+	}while (true);
+
     QF_init();       // initialize the framework and the underlying RT kernel
     //BSP_init();      // initialize the BSP
     //BSP_start();     // start the AOs/Threads
@@ -127,6 +136,7 @@ QState Blinky_off(Blinky * const me, QEvt const * const e) {
             break;
         }
         case TIMEOUT_SIG: { // TIMEOUT event
+
             status = Q_TRAN(&Blinky_on); // transition to "on"
             break;
         }
