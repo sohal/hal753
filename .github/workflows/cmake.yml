@@ -9,6 +9,9 @@ on:
     branches: [main, develop]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,13 +21,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        preset: [nucleo-h753-hal-gnuarm14.3, nucleo-h753-hal-atfe21.1]
+        preset: [
+          "nucleo-h753-hal-gnuarm14.3",
+          "nucleo-h753-hal-atfe21.1"
+        ]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Fetch all history for git tags
+
+      - name: Fix git safe directory
+        run: |
+          git config --global --add safe.directory /__w/hal753/hal753
 
       - name: Configure CMake
         run: |
@@ -34,10 +44,19 @@ jobs:
         run: |
           cmake --build --preset ${{ matrix.preset }}
 
+      - name: Package with CPack
+        working-directory: build/${{ matrix.preset }}
+        run: |
+          # Create packages using CPack
+          cpack -G "TGZ"
+
+          # List generated packages
+          ls -la *.tar.gz
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: nucleo-hal-${{ matrix.preset }}
+          name: ${{ matrix.preset }}-packages
           path: build/${{ matrix.preset }}/*.tar.gz
           retention-days: 7
 
@@ -47,15 +66,57 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: packages
+          path: ./artifacts
+
+      - name: Prepare release assets
+        run: |
+          # Create release directory and copy CPack generated packages
+          mkdir -p release-assets
+
+          # Debug: List all downloaded artifacts
+          echo "Downloaded artifacts structure:"
+          find artifacts/ -type f -name "*" | head -20
+
+          # Copy all CPack generated tar.gz files from artifacts
+          find artifacts/ -name "*.tar.gz" -exec cp {} release-assets/ \;
+
+          # Debug: List prepared release assets
+          echo "Release assets prepared:"
+          ls -la release-assets/
+
+          # Ensure we have files to release
+          if [ ! "$(ls -A release-assets/)" ]; then
+            echo "Error: No release assets found!"
+            exit 1
+          fi
+
+          # Generate SHA256 checksums for each file
+          cd release-assets
+          for file in *.tar.gz; do
+            if [ -f "$file" ]; then
+              sha256sum "$file" > "$file.sha256"
+              echo "Generated: $file.sha256"
+            fi
+          done
+
+          # Also create a combined SHA256SUMS.txt for convenience
+          sha256sum *.tar.gz > SHA256SUMS.txt
+          echo "SHA256 checksums generated:"
+          cat SHA256SUMS.txt
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: packages/**/*.tar.gz
+          files: |
+            release-assets/*.tar.gz
+            release-assets/*.sha256
+            release-assets/SHA256SUMS.txt
           draft: false
           prerelease: false
         env:

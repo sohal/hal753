@@ -51,5 +51,17 @@
             "name": "nucleo-h753-hal-atfe21.1",
             "configurePreset": "nucleo-h753-hal-atfe21.1"
         }
+    ],
+    "packagePresets": [
+        {
+            "name": "nucleo-h753-hal-gnuarm14.3",
+            "configurePreset": "nucleo-h753-hal-gnuarm14.3",
+            "generators": ["TGZ"]
+        },
+        {
+            "name": "nucleo-h753-hal-atfe21.1",
+            "configurePreset": "nucleo-h753-hal-atfe21.1",
+            "generators": ["TGZ"]
+        }
     ]
 }
