@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.25)
+
+project(nucleo-hal VERSION @PROJECT_VERSION@)
+
+# Set CMAKE_PREFIX_PATH to include the lib/cmake directory
+list(PREPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib/cmake")
+
+# Find and include the nucleo package
+find_package(nucleo @PROJECT_VERSION@ REQUIRED)
+
+# Provide convenience variables for downstream projects
+set(NUCLEO_FOUND ${nucleo_FOUND})
+set(NUCLEO_VERSION ${nucleo_VERSION})
+set(NUCLEO_INCLUDE_DIRS ${NUCLEO_INCLUDE_DIRS})
+
+# Available targets: nucleo::bsp, nucleo::lwip, nucleo::h753
+message(STATUS "Nucleo HAL package found: ${NUCLEO_VERSION}")
+message(STATUS "Available targets: nucleo::bsp, nucleo::lwip, nucleo::h753")

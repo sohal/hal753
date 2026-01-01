@@ -18,7 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cryp.h"
+#include "hash.h"
 #include "lwip.h"
+#include "rng.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -42,26 +46,20 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-CRYP_HandleTypeDef hcryp;
-__ALIGN_BEGIN static const uint32_t pKeyCRYP[6] __ALIGN_END = {
-                            0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000};
-
-HASH_HandleTypeDef hhash;
-
-RNG_HandleTypeDef hrng;
-
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_CRYP_Init(void);
-static void MX_HASH_Init(void);
-static void MX_RNG_Init(void);
 /* USER CODE BEGIN PFP */
-
+__attribute__((weak)) void application_init(void)
+{
+  /* Prevent unused argument(s) compilation warning */
+  /* NOTE: This function should not be modified, when the callback is needed,
+           the application_init could be implemented in the user file
+   */
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -103,7 +101,7 @@ int main(void)
   MX_HASH_Init();
   MX_RNG_Init();
   /* USER CODE BEGIN 2 */
-
+  application_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -178,131 +176,31 @@ void SystemClock_Config(void)
   HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSI, RCC_MCODIV_1);
 }
 
-/**
-  * @brief CRYP Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_CRYP_Init(void)
-{
-
-  /* USER CODE BEGIN CRYP_Init 0 */
-
-  /* USER CODE END CRYP_Init 0 */
-
-  /* USER CODE BEGIN CRYP_Init 1 */
-
-  /* USER CODE END CRYP_Init 1 */
-  hcryp.Instance = CRYP;
-  hcryp.Init.DataType = CRYP_DATATYPE_32B;
-  hcryp.Init.pKey = (uint32_t *)pKeyCRYP;
-  hcryp.Init.Algorithm = CRYP_TDES_ECB;
-  if (HAL_CRYP_Init(&hcryp) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN CRYP_Init 2 */
-
-  /* USER CODE END CRYP_Init 2 */
-
-}
-
-/**
-  * @brief HASH Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_HASH_Init(void)
-{
-
-  /* USER CODE BEGIN HASH_Init 0 */
-
-  /* USER CODE END HASH_Init 0 */
-
-  /* USER CODE BEGIN HASH_Init 1 */
-
-  /* USER CODE END HASH_Init 1 */
-  hhash.Init.DataType = HASH_DATATYPE_32B;
-  if (HAL_HASH_Init(&hhash) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN HASH_Init 2 */
-
-  /* USER CODE END HASH_Init 2 */
-
-}
-
-/**
-  * @brief RNG Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_RNG_Init(void)
-{
-
-  /* USER CODE BEGIN RNG_Init 0 */
-
-  /* USER CODE END RNG_Init 0 */
-
-  /* USER CODE BEGIN RNG_Init 1 */
-
-  /* USER CODE END RNG_Init 1 */
-  hrng.Instance = RNG;
-  hrng.Init.ClockErrorDetection = RNG_CED_ENABLE;
-  if (HAL_RNG_Init(&hrng) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN RNG_Init 2 */
-
-  /* USER CODE END RNG_Init 2 */
-
-}
-
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_GPIO_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  /* USER CODE BEGIN MX_GPIO_Init_1 */
-
-  /* USER CODE END MX_GPIO_Init_1 */
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
-
-  /*Configure GPIO pins : STLINK_RX_Pin STLINK_TX_Pin */
-  GPIO_InitStruct.Pin = STLINK_RX_Pin|STLINK_TX_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PA8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN MX_GPIO_Init_2 */
-
-  /* USER CODE END MX_GPIO_Init_2 */
-}
-
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM6 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM6)
+  {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.
