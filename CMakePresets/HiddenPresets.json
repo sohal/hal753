@@ -57,7 +57,7 @@
             "cacheVariables": {
                 "CORTEX_TYPE": "CM7",
                 "STM32_TYPE": "h7",
-                "STM32_DEVICE": "STM32H743xx"
+                "STM32_DEVICE": "STM32H753xx"
             }
         },
         {
