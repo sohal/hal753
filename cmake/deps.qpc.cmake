@@ -27,7 +27,7 @@ if(qpc_ADDED)
         @ONLY
     )
 
-    set (libName qpc_lib)
+    set (libName qpc)
     # Create qpc library target
     add_library(${libName} STATIC)
     
@@ -53,8 +53,9 @@ if(qpc_ADDED)
             "$<BUILD_INTERFACE:${qpc_SOURCE_DIR}/include>"
             "$<BUILD_INTERFACE:${qpc_SOURCE_DIR}/ports/arm-cm/config>"
             "$<BUILD_INTERFACE:${QPC_PORT_DIR}>"
-            "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/frameworks/qpc>"
-            "$<INSTALL_INTERFACE:include>"
+            "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/include>"
+            "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/config>"
+            "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/port>"
     )
     
     target_compile_definitions(${libName}

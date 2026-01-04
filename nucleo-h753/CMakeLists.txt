@@ -12,7 +12,7 @@ set(st_HAL_DRV_SRC_DIR "${st_HAL_Driver_DIR}/Src" CACHE PATH "Path to STM32CubeH
 
 # =====================================================================
 # Nucleo H753 Main Library (HAL + Application)
-# QP/C framework is built as separate library (qpc_lib)
+# QP/C framework is built as separate library (qpc)
 # =====================================================================
 set (libName nucleo-h753)
 add_library(${libName} STATIC)
@@ -97,8 +97,6 @@ target_include_directories(${libName}
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc/Legacy>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/CMSIS/Include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/CMSIS/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/port>
 )
 
 # Set compile definitions on unified target only

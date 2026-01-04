@@ -3,9 +3,9 @@
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-# Install qpc_lib and nucleo-h753 static libraries
+# Install qpc and nucleo-h753 static libraries
 install(
-    TARGETS qpc_lib nucleo-h753
+    TARGETS qpc nucleo-h753
     EXPORT nucleoTargets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     COMPONENT library
@@ -84,6 +84,13 @@ install(
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qpc/port
     COMPONENT library
     FILES_MATCHING PATTERN "*.h"
+)
+
+# Install QP/C configuration header
+install(
+    FILES ${qpc_SOURCE_DIR}/ports/arm-cm/config/qp_config.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qpc/config
+    COMPONENT library
 )
 
 # Generate and install CMake package config files
