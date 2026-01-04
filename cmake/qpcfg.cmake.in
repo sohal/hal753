@@ -1,7 +1,3 @@
-/*
- * QP/C Configuration Header
- * Configuration for Quantum Platform in C for STM32H753 with QK kernel
- */
 
 #pragma once
 

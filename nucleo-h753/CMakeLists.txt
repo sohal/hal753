@@ -14,11 +14,12 @@ set(st_HAL_DRV_SRC_DIR "${st_HAL_Driver_DIR}/Src" CACHE PATH "Path to STM32CubeH
 # Nucleo H753 Main Library (HAL + Application)
 # QP/C framework is built as separate library (qpc_lib)
 # =====================================================================
-add_library(nucleo-h753 STATIC)
-add_library(nucleo::nucleo-h753 ALIAS nucleo-h753)
+set (libName nucleo-h753)
+add_library(${libName} STATIC)
+add_library(nucleo::${libName} ALIAS ${libName})
 
 # HAL driver sources (from Makefile C_SOURCES)
-target_sources(nucleo-h753
+target_sources(${libName}
     PRIVATE
         ${st_HAL_DRV_SRC_DIR}/stm32${LOWERCASE_STM32_TYPE}xx_hal_eth.c
         ${st_HAL_DRV_SRC_DIR}/stm32${LOWERCASE_STM32_TYPE}xx_hal_rcc.c
@@ -48,7 +49,7 @@ target_sources(nucleo-h753
 )
 
 # Core application sources
-target_sources(nucleo-h753
+target_sources(${libName}  
     PRIVATE
         Core/Src/main.c
         Core/Src/gpio.c
@@ -65,11 +66,6 @@ target_sources(nucleo-h753
         Core/Src/sysmem.c
 )
 
-# QP/C adapter from frameworks/qpc
-target_sources(nucleo-h753
-    PRIVATE
-        ${CMAKE_SOURCE_DIR}/frameworks/qpc/qpc-adapter.c
-)
 
 # Generate GPIO structures from CubeMX main.h
 # NOTE: This utility is not available in cmake_scripts v1.0.7.4
@@ -81,13 +77,13 @@ target_sources(nucleo-h753
 #     GENERATED_FILE GPIO_STRUCT_GENERATED_HEADER
 # )
 
-target_sources(nucleo-h753
+target_sources(${libName}
     PRIVATE
         ${GPIO_STRUCT_GENERATED_HEADER}
 )
 
 # Include directories
-target_include_directories(nucleo-h753
+target_include_directories(${libName}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>                  # For generated GPIO struct header
@@ -103,27 +99,29 @@ target_include_directories(nucleo-h753
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/CMSIS/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/port>
-    PRIVATE
-        ${CMAKE_SOURCE_DIR}/frameworks/qpc           # QP/C adapter
-        ${CMAKE_SOURCE_DIR}/ao/common                # AO headers (for build only, not installed)
-        ${CMAKE_SOURCE_DIR}/ao/stack_monitor
-        ${CMAKE_SOURCE_DIR}/ao/blinky
-)
-
-# Link with qpc library publicly (downstream projects get qpc automatically)
-target_link_libraries(nucleo-h753
-    PUBLIC
-        qpc::qpc
 )
 
 # Set compile definitions on unified target only
-target_compile_definitions(nucleo-h753
+target_compile_definitions(${libName}
     PUBLIC
         USE_HAL_DRIVER
         STM32H753xx
         USE_PWR_LDO_SUPPLY
 )
-
+target_compile_options(${libName}
+    PRIVATE
+        -mcpu=cortex-m7
+        -mthumb
+        -mfpu=fpv5-d16
+        -mfloat-abi=hard
+        -Os
+        -g3
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Werror
+)
+unset (libName)
 # =====================================================================
 # Installation
 # =====================================================================
