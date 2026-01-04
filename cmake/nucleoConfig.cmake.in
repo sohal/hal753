@@ -11,9 +11,42 @@ set_target_properties(nucleo::nucleo-h753 PROPERTIES
 # Provide package variables
 set(NUCLEO_FOUND TRUE)
 set(NUCLEO_VERSION "@PROJECT_VERSION@")
-set(NUCLEO_INCLUDE_DIRS
+
+# Cache variables for include directories
+set(NUCLEO_HAL_INCLUDE_DIRS
     "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/nucleo"
     "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/stm32cubeh7"
+    CACHE STRING "STM32H753 HAL include directories"
+)
+
+set(NUCLEO_QPC_INCLUDE_DIRS
+    "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/qpc/include"
+    "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/qpc/config"
+    "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/qpc/port"
+    CACHE STRING "QP/C framework include directories"
+)
+
+set(NUCLEO_INCLUDE_DIRS
+    ${NUCLEO_HAL_INCLUDE_DIRS}
+    ${NUCLEO_QPC_INCLUDE_DIRS}
+    CACHE STRING "All Nucleo package include directories"
+)
+
+# Cache variables for library archives
+set(NUCLEO_HAL_LIBRARY
+    "@PACKAGE_CMAKE_INSTALL_LIBDIR@/libnucleo-h753.a"
+    CACHE FILEPATH "STM32H753 HAL static library"
+)
+
+set(NUCLEO_QPC_LIBRARY
+    "@PACKAGE_CMAKE_INSTALL_LIBDIR@/libqpc.a"
+    CACHE FILEPATH "QP/C framework static library"
+)
+
+set(NUCLEO_LIBRARIES
+    ${NUCLEO_HAL_LIBRARY}
+    ${NUCLEO_QPC_LIBRARY}
+    CACHE STRING "All Nucleo package libraries"
 )
 
 check_required_components(nucleo)

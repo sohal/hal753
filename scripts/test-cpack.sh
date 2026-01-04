@@ -63,7 +63,7 @@ echo ""
 echo "[3/5] Verifying library files..."
 
 EXPECTED_LIBS=(
-    "lib/libqpc_lib.a"
+    "lib/libqpc.a"
     "lib/libnucleo-h753.a"
 )
 
