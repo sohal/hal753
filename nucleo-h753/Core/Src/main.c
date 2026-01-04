@@ -22,6 +22,7 @@
 #include "eth.h"
 #include "hash.h"
 #include "rng.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -104,6 +105,7 @@ int main(void)
   MX_HASH_Init();
   MX_RNG_Init();
   MX_ETH_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   application_init();
   /* USER CODE END 2 */
