@@ -15,7 +15,7 @@ set(st_HAL_DRV_SRC_DIR "${st_HAL_Driver_DIR}/Src" CACHE PATH "Path to STM32CubeH
 # QP/C framework is built as separate library (qpc_lib)
 # =====================================================================
 add_library(nucleo-h753 STATIC)
-add_library(nucleo::h753 ALIAS nucleo-h753)
+add_library(nucleo::nucleo-h753 ALIAS nucleo-h753)
 
 # HAL driver sources (from Makefile C_SOURCES)
 target_sources(nucleo-h753
@@ -51,8 +51,15 @@ target_sources(nucleo-h753
 target_sources(nucleo-h753
     PRIVATE
         Core/Src/main.c
+        Core/Src/gpio.c
+        Core/Src/eth.c
+        Core/Src/usart.c
+        Core/Src/rng.c
+        Core/Src/hash.c
+        Core/Src/cryp.c
         Core/Src/stm32h7xx_it.c
         Core/Src/stm32h7xx_hal_msp.c
+        Core/Src/stm32h7xx_hal_timebase_tim.c
         Core/Src/system_stm32h7xx.c
         Core/Src/syscalls.c
         Core/Src/sysmem.c
@@ -90,7 +97,10 @@ target_include_directories(nucleo-h753
         $<BUILD_INTERFACE:${st_cmsis_PATH}/Core/Include>
         $<BUILD_INTERFACE:${st_cmsis_PATH}/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/nucleo>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc/Legacy>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/CMSIS/Include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/CMSIS/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/frameworks/qpc           # QP/C adapter
         ${CMAKE_SOURCE_DIR}/ao/common                # AO headers (for build only, not installed)
