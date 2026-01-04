@@ -92,11 +92,11 @@ target_include_directories(${libName}
         $<BUILD_INTERFACE:${st_cmsis_PATH}/Include>
         $<BUILD_INTERFACE:${st_cmsis_PATH}/Core/Include>
         $<BUILD_INTERFACE:${st_cmsis_PATH}/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/nucleo>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc/Legacy>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/CMSIS/Include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/CMSIS/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include>
+        $<INSTALL_INTERFACE:include/nucleo>
+        $<INSTALL_INTERFACE:include/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc>
+        $<INSTALL_INTERFACE:include/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc/Legacy>
+        $<INSTALL_INTERFACE:include/stm32cubeh7/Drivers/CMSIS/Include>
+        $<INSTALL_INTERFACE:include/stm32cubeh7/Drivers/CMSIS/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include>
 )
 
 # Set compile definitions on unified target only

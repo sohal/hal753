@@ -53,9 +53,9 @@ if(qpc_ADDED)
             "$<BUILD_INTERFACE:${qpc_SOURCE_DIR}/include>"
             "$<BUILD_INTERFACE:${qpc_SOURCE_DIR}/ports/arm-cm/config>"
             "$<BUILD_INTERFACE:${QPC_PORT_DIR}>"
-            "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/include>"
-            "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/config>"
-            "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/port>"
+            "$<INSTALL_INTERFACE:include/qpc/include>"
+            "$<INSTALL_INTERFACE:include/qpc/config>"
+            "$<INSTALL_INTERFACE:include/qpc/port>"
     )
     
     target_compile_definitions(${libName}
