@@ -9,6 +9,9 @@
 #include "../common/signals.h"
 #include "../../frameworks/mongoose/mongoose.h"
 
+/* QP/C module definition for assertions */
+Q_DEFINE_THIS_MODULE("mongoose_ao")
+
 /* Mongoose manager is global from mongoose implementation */
 extern struct mg_mgr g_mgr;
 
