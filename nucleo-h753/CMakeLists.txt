@@ -101,6 +101,8 @@ target_include_directories(nucleo-h753
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc/Legacy>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/CMSIS/Include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/CMSIS/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/qpc/port>
     PRIVATE
         ${CMAKE_SOURCE_DIR}/frameworks/qpc           # QP/C adapter
         ${CMAKE_SOURCE_DIR}/ao/common                # AO headers (for build only, not installed)
