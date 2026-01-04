@@ -53,37 +53,45 @@ hal753/
 
 ## Library Architecture
 
-The project generates three separate static libraries:
+The project generates two separate static libraries:
 
-### 1. **bsp** (`libbsp.a`)
-- **Purpose**: Board Support Package for Ethernet PHY
-- **Sources**: `lan8742.c` from STM32CubeH7 BSP components
-- **Exports**: `bsp::bsp` CMake target
+### 1. **qpc** (`libqpc.a`)
+- **Purpose**: QP/C real-time embedded framework
+- **Sources**: QP/C core (qf, qk) and ARM Cortex-M port sources
+- **Exports**: `qpc::qpc` CMake target
 - **Dependencies**: None (standalone)
+- **Port**: ARM Cortex-M with QK kernel
 
-### 2. **lwip** (`liblwip.a`)
-- **Purpose**: LwIP TCP/IP stack middleware
-- **Sources**: All LwIP core, API, netif, and system sources from STM32CubeH7
-- **Exports**: `lwip::lwip` CMake target
-- **Dependencies**: None (standalone)
-
-### 3. **nucleo-h753** (`libnucleo-h753.a`)
-- **Purpose**: Main HAL library with application code
+### 2. **nucleo-h753** (`libnucleo-h753.a`)
+- **Purpose**: STM32H7 HAL library with application code
 - **Sources**:
   - STM32H7xx HAL drivers (eth, rcc, flash, gpio, dma, pwr, tim, i2c, etc.)
   - Core application (main.c, stm32h7xx_it.c, hal_msp.c, syscalls, etc.)
-  - LWIP application layer (lwip.c, ethernetif.c)
-  - Generated GPIO structures from CubeMX
+  - QP/C adapter layer (qpc-adapter.c)
 - **Exports**: `nucleo::h753` CMake target
-- **Dependencies**: Links `bsp::bsp` and `lwip::lwip` **publicly**
+- **Dependencies**: Links `qpc::qpc` **publicly**
 - **Compile Definitions**: `USE_HAL_DRIVER`, `STM32H753xx`, `USE_PWR_LDO_SUPPLY`
+- **Note**: Active Objects are for demonstration only and not included in the package
 
-### Unified Target
+### Target Usage
 
-Users typically link with `nucleo::h753` which transitively provides:
-- All three libraries
+**Typical usage** - Link with `nucleo::h753`:
+```cmake
+target_link_libraries(my_firmware PRIVATE nucleo::h753)
+```
+
+This provides:
+- STM32H7 HAL library
+- QP/C framework (automatically via public linking)
 - All compile definitions
 - All include paths (board headers + STM32Cube hierarchy)
+
+**Note**: Active Objects (in `ao/` directory) are demonstration code only. Downstream projects should implement their own Active Objects using the QP/C framework.
+
+**Advanced usage** - Use only QP/C for custom implementations:
+```cmake
+target_link_libraries(my_custom_board PRIVATE qpc::qpc)
+```
 
 ## Build System Features
 
@@ -109,8 +117,9 @@ Users typically link with `nucleo::h753` which transitively provides:
 ### Package Generation
 - Board-agnostic naming: `nucleo-hal-<version>-<toolchain>.tar.gz`
 - Preserves STM32Cube include hierarchy
-- Installs all three libraries with unified CMake export
+- Installs both libraries (qpc and nucleo-h753) with unified CMake export
 - Self-contained packages with CMake config files
+- QP/C headers installed separately for reusability
 
 ## Preset System
 
@@ -122,7 +131,7 @@ Users typically link with `nucleo::h753` which transitively provides:
 
 ### Build Presets
 - Match configure presets
-- Build all three libraries
+- Build both QP/C and HAL libraries
 
 ### Package Presets
 - Create TGZ archives via CPack
@@ -142,13 +151,9 @@ GitHub Actions workflow (`.github/workflows/cmake.yml`):
 
 ## Key Design Decisions
 
-### Separate Libraries
-- **Rationale**: Modular design, users can selectively link if needed
-- **Implementation**: Three distinct static libraries, all installed
-
-### Unified Target
-- **Rationale**: Convenience for typical use cases
-- **Implementation**: `nucleo::h753` links both `bsp::bsp` and `lwip::lwip` publicly
+### Two-Library Architecture
+- **Rationale**: QP/C as reusable component, can be used independently
+- **Implementation**: `qpc::qpc` standalone library, `nucleo::h753` links it publicly
 
 ### Board-Agnostic Packaging
 - **Rationale**: HAL is independent of specific board variant
@@ -168,11 +173,6 @@ GitHub Actions workflow (`.github/workflows/cmake.yml`):
 ```cmake
 find_package(nucleo REQUIRED)
 target_link_libraries(my_firmware PRIVATE nucleo::h753)
-```
-
-### Selective Linking
-```cmake
-target_link_libraries(my_app PRIVATE nucleo::lwip nucleo::bsp)
 ```
 
 ### Custom Definitions

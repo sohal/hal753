@@ -11,24 +11,10 @@ install(
     COMPONENT library
 )
 
-# Install board-specific headers (Core/Inc and LWIP/App, LWIP/Target)
+# Install board-specific headers (Core/Inc)
 install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/nucleo
-    COMPONENT library
-    FILES_MATCHING PATTERN "*.h"
-)
-
-install(
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/LWIP/App/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/nucleo/lwip
-    COMPONENT library
-    FILES_MATCHING PATTERN "*.h"
-)
-
-install(
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/LWIP/Target/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/nucleo/lwip
     COMPONENT library
     FILES_MATCHING PATTERN "*.h"
 )
@@ -55,14 +41,6 @@ list(FILTER STLegacyHeaders EXCLUDE REGEX "template")
 install(
     FILES ${STLegacyHeaders}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc/Legacy
-    COMPONENT library
-)
-
-# Install BSP headers (lan8742)
-file(GLOB BSPHeaders ${st_BSP_lan8742_DIR}/*.h)
-install(
-    FILES ${BSPHeaders}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Drivers/BSP/Components/lan8742
     COMPONENT library
 )
 
@@ -93,17 +71,17 @@ install(
     COMPONENT library
 )
 
-# Install LwIP headers (preserving directory structure)
+# Install QP/C headers
 install(
-    DIRECTORY ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/src/include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Middlewares/Third_Party/LwIP/src/include
+    DIRECTORY ${qpc_SOURCE_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qpc/include
     COMPONENT library
     FILES_MATCHING PATTERN "*.h"
 )
 
 install(
-    DIRECTORY ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/system/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/stm32cubeh7/Middlewares/Third_Party/LwIP/system
+    DIRECTORY ${QPC_PORT_DIR}/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qpc/port
     COMPONENT library
     FILES_MATCHING PATTERN "*.h"
 )

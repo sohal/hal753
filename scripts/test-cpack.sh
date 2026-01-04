@@ -46,7 +46,7 @@ EXPECTED_DIRS=(
     "lib"
     "lib/cmake/nucleo"
     "include/nucleo"
-    "include/nucleo/lwip"
+    "include/qpc"
     "include/stm32cubeh7"
 )
 
@@ -63,8 +63,7 @@ echo ""
 echo "[3/5] Verifying library files..."
 
 EXPECTED_LIBS=(
-    "lib/libbsp.a"
-    "lib/liblwip.a"
+    "lib/libqpc_lib.a"
     "lib/libnucleo-h753.a"
 )
 
@@ -104,10 +103,8 @@ EXPECTED_HEADERS=(
     "include/nucleo/main.h"
     "include/nucleo/stm32h7xx_hal_conf.h"
     "include/nucleo/stm32h7xx_it.h"
-    "include/nucleo/gpio_struct.h"
-    "include/nucleo/lwip/lwip.h"
-    "include/nucleo/lwip/ethernetif.h"
-    "include/nucleo/lwip/lwipopts.h"
+    "include/qpc/include/qp.h"
+    "include/qpc/port/qp_port.h"
 )
 
 for header in "${EXPECTED_HEADERS[@]}"; do

@@ -13,6 +13,6 @@ set(NUCLEO_FOUND ${nucleo_FOUND})
 set(NUCLEO_VERSION ${nucleo_VERSION})
 set(NUCLEO_INCLUDE_DIRS ${NUCLEO_INCLUDE_DIRS})
 
-# Available targets: nucleo::bsp, nucleo::lwip, nucleo::h753
+# Available targets: qpc::qpc, nucleo::h753
 message(STATUS "Nucleo HAL package found: ${NUCLEO_VERSION}")
-message(STATUS "Available targets: nucleo::bsp, nucleo::lwip, nucleo::h753")
+message(STATUS "Available targets: qpc::qpc, nucleo::h753")
