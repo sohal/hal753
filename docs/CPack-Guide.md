@@ -72,8 +72,7 @@ nucleo-hal-<version>-<toolchain>/
 ├── CMakeLists.txt                    # Root CMake for package users
 │
 ├── lib/                              # Static libraries
-│   ├── libbsp.a                      # BSP library
-│   ├── liblwip.a                     # LwIP library
+│   ├── libqpc.a                      # QP/C framework library
 │   ├── libnucleo-h753.a              # Main HAL library
 │   └── cmake/nucleo/                 # CMake package files
 │       ├── nucleoConfig.cmake
@@ -84,12 +83,11 @@ nucleo-hal-<version>-<toolchain>/
     ├── nucleo/                       # Board-specific
     │   ├── main.h
     │   ├── stm32h7xx_hal_conf.h
-    │   ├── stm32h7xx_it.h
-    │   ├── gpio_struct.h
-    │   └── lwip/
-    │       ├── lwip.h
-    │       ├── ethernetif.h
-    │       └── lwipopts.h
+    │   └── stm32h7xx_it.h
+    │
+    ├── qpc/                          # QP/C framework
+    │   ├── include/                  # QP/C core headers
+    │   └── port/                     # ARM Cortex-M port headers
     │
     └── stm32cubeh7/                  # STM32Cube hierarchy
         ├── Drivers/
@@ -97,15 +95,10 @@ nucleo-hal-<version>-<toolchain>/
         │   │   └── Inc/
         │   │       ├── *.h
         │   │       └── Legacy/*.h
-        │   ├── CMSIS/
-        │   │   ├── Core/Include/*.h
-        │   │   ├── Include/*.h
-        │   │   └── Device/ST/STM32H7xx/Include/*.h
-        │   └── BSP/Components/lan8742/*.h
-        │
-        └── Middlewares/Third_Party/LwIP/
-            ├── src/include/**/*.h
-            └── system/**/*.h
+        │   └── CMSIS/
+        │       ├── Core/Include/*.h
+        │       ├── Include/*.h
+        │       └── Device/ST/STM32H7xx/Include/*.h
 ```
 
 ## Testing Packages

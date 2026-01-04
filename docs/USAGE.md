@@ -77,25 +77,20 @@ add_executable(my_firmware
     src/app.c
 )
 
-# Link with the unified nucleo target
+# Link with the nucleo target
 target_link_libraries(my_firmware
     PRIVATE
         nucleo::h753
 )
-
-# Optional: Link only specific libraries
-# target_link_libraries(my_firmware PRIVATE nucleo::bsp nucleo::lwip)
 ```
 
-### Using individual libraries
+### Using the library
 
-The package provides three library targets:
+The package provides one library target:
 
-- `nucleo::bsp` - BSP library (lan8742 Ethernet PHY driver)
-- `nucleo::lwip` - LwIP middleware library
-- `nucleo::h753` - Main HAL library (links bsp and lwip publicly)
+- `nucleo::h753` - Main HAL library with QP/C framework and Mongoose network stack
 
-For most use cases, link with `nucleo::h753` which includes everything:
+Link with `nucleo::h753` which includes everything:
 
 ```cmake
 target_link_libraries(my_firmware PRIVATE nucleo::h753)
@@ -103,8 +98,7 @@ target_link_libraries(my_firmware PRIVATE nucleo::h753)
 
 This automatically provides:
 - All HAL drivers
-- BSP components
-- LwIP middleware
+- QP/C framework (QK kernel)
 - Compile definitions (`USE_HAL_DRIVER`, `STM32H753xx`, `USE_PWR_LDO_SUPPLY`)
 - Include paths
 
@@ -122,8 +116,7 @@ message(STATUS "Nucleo includes: ${NUCLEO_INCLUDE_DIRS}")
 nucleo-hal-<version>-<toolchain>/
 ├── CMakeLists.txt              # Root CMake file for package
 ├── lib/
-│   ├── libbsp.a               # BSP static library
-│   ├── liblwip.a              # LwIP static library
+│   ├── libqpc.a               # QP/C framework static library
 │   ├── libnucleo-h753.a       # Main HAL static library
 │   └── cmake/
 │       └── nucleo/
@@ -134,17 +127,14 @@ nucleo-hal-<version>-<toolchain>/
     ├── nucleo/                # Board-specific headers
     │   ├── main.h
     │   ├── stm32h7xx_hal_conf.h
-    │   ├── stm32h7xx_it.h
-    │   ├── gpio_struct.h      # Generated GPIO structures
-    │   └── lwip/              # LWIP App and Target headers
+    │   └── stm32h7xx_it.h
+    ├── qpc/                   # QP/C framework headers
+    │   ├── include/           # QP/C core headers
+    │   └── port/              # ARM Cortex-M port headers
     └── stm32cubeh7/           # STM32Cube headers
         ├── Drivers/
         │   ├── STM32H7xx_HAL_Driver/
-        │   ├── CMSIS/
-        │   └── BSP/
-        └── Middlewares/
-            └── Third_Party/LwIP/
-```
+        │   └── CMSIS/
 
 ## Example Projects
 

@@ -1,10 +1,10 @@
 # hal753
 
-CMake-based build system for STM32H7 Nucleo boards with integrated HAL, BSP, and LwIP middleware libraries.
+CMake-based build system for STM32H7 Nucleo boards with integrated HAL and QP/C framework.
 
 ## Features
 
-- **Modular Library Architecture**: Separate static libraries for BSP (`libbsp.a`), LwIP (`liblwip.a`), and board HAL (`libnucleo-h753.a`)
+- **Modular Library Architecture**: Separate static libraries for QP/C framework (`libqpc.a`) and board HAL (`libnucleo-h753.a`)
 - **CMake Presets**: Pre-configured build presets for multiple toolchains (ARM GCC 14.3, ARM Compiler for Embedded 21.1)
 - **Auto-Generated GPIO Structures**: Type-safe GPIO access via cmake_scripts
 - **CPM Package Manager**: Automated dependency fetching for STM32CubeH7 and toolchain files
@@ -13,7 +13,7 @@ CMake-based build system for STM32H7 Nucleo boards with integrated HAL, BSP, and
 
 ## Supported Boards
 
-- **nucleo-h753**: STM32H753ZI (Cortex-M7F) with Ethernet (LAN8742) and LwIP stack
+- **nucleo-h753**: STM32H753ZI (Cortex-M7F) with QP/C QK kernel
 
 ## Quick Start
 
@@ -58,8 +58,7 @@ See [docs/USAGE.md](docs/USAGE.md) for detailed integration examples.
 ```
 hal753/
 ├── nucleo-h753/          # Board-specific code and configuration
-│   ├── Core/             # Application code (main.c, interrupts, MSP)
-│   └── LWIP/             # LwIP application and target files
+│   └── Core/             # Application code (main.c, interrupts, MSP)
 ├── cmake/                # CMake modules and package configuration
 ├── CMakePresets/         # Modular CMake preset files
 ├── docs/                 # Documentation
@@ -68,11 +67,10 @@ hal753/
 
 ## Library Targets
 
-When the package is installed, three CMake targets are available:
+When the package is installed, the following CMake targets are available:
 
-- `bsp::bsp` - BSP drivers (LAN8742 Ethernet PHY)
-- `lwip::lwip` - LwIP TCP/IP stack
-- `nucleo::h753` - Board HAL library (publicly links bsp and lwip)
+- `qpc::qpc` - QP/C real-time framework with QK kernel (ARM Cortex-M port)
+- `nucleo::h753` - STM32H7 HAL library (links `qpc::qpc` publicly for easy integration)
 
 ## Documentation
 
@@ -83,7 +81,8 @@ When the package is installed, three CMake targets are available:
 
 This project's CMake configuration is licensed under the BSD 3-Clause License. See [LICENSE](LICENSE) for details.
 
-STM32CubeH7 HAL/LL drivers and LwIP middleware retain their original licenses from STMicroelectronics.
+- STM32CubeH7 HAL/LL drivers retain their original licenses from STMicroelectronics
+- QP/C framework is dual-licensed under GPL or commercial license by Quantum Leaps
 
 ## Contributing
 
