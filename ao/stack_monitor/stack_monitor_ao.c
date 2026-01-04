@@ -11,6 +11,9 @@
 #include <stdio.h>
 #include <string.h>
 
+/* QP/C module definition for assertions */
+Q_DEFINE_THIS_MODULE("stack_monitor")
+
 /* Stack watermark pattern */
 #define STACK_PATTERN 0xDEADBEEF
 

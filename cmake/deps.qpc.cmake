@@ -8,6 +8,8 @@ CPMAddPackage(
     GIT_TAG v8.1.1
     OPTIONS
         "QPCPP OFF"
+        "QPC_CFG_KERNEL qk"
+        "QPC_CFG_PORT arm-cm"
 )
 
 if(qpc_ADDED)
@@ -38,13 +40,14 @@ if(qpc_ADDED)
     
     target_include_directories(qpc_lib
         PUBLIC
-            "${qpc_SOURCE_DIR}/include"
-            "${QPC_PORT_DIR}"
+            "$<BUILD_INTERFACE:${qpc_SOURCE_DIR}/include>"
+            "$<BUILD_INTERFACE:${QPC_PORT_DIR}>"
+            "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/frameworks/qpc>"
+            "$<INSTALL_INTERFACE:include>"
     )
     
     target_compile_definitions(qpc_lib
         PUBLIC
-            Q_SPY=0
             QP_API_VERSION=0
     )
     

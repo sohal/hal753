@@ -11,6 +11,9 @@
 #include "../common/signals.h"
 #include "main.h"
 
+/* QP/C module definition for assertions */
+Q_DEFINE_THIS_MODULE("blinky")
+
 /*
  * Blinky Active Object
  * Toggles LDGreen LED at 1Hz (500ms on, 500ms off)

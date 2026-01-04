@@ -3,9 +3,9 @@
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-# Install bsp and nucleo-h753 static libraries (lwip removed - using Mongoose)
+# Install qpc_lib and nucleo-h753 static libraries
 install(
-    TARGETS bsp nucleo-h753
+    TARGETS qpc_lib nucleo-h753
     EXPORT nucleoTargets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     COMPONENT library

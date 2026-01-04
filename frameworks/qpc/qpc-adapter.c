@@ -15,6 +15,9 @@
 #include "../../ao/stack_monitor/stack_monitor_ao.h"
 #include "../../ao/blinky/blinky.h"
 
+/* QP/C module definition for assertions */
+Q_DEFINE_THIS_MODULE("qpc_adapter")
+
 /* Stack watermark pattern */
 #define STACK_PATTERN 0xDEADBEEF
 #define STACK_TOTAL_SIZE 65536U

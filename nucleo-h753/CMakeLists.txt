@@ -9,38 +9,10 @@ set(st_HAL_Driver_DIR ${stm32cubeh7_SOURCE_DIR}/Drivers/STM32${UPPERCASE_STM32_T
 set(st_HAL_DRV_INCLUDE_DIR "${st_HAL_Driver_DIR}/Inc" CACHE PATH "Path to STM32CubeH7 HAL Driver Include folder" FORCE)
 set(st_HAL_DRV_INCLUDE_LEGACY_DIR "${st_HAL_DRV_INCLUDE_DIR}/Legacy" CACHE PATH "Path to STM32CubeH7 HAL Driver Legacy Include folder" FORCE)
 set(st_HAL_DRV_SRC_DIR "${st_HAL_Driver_DIR}/Src" CACHE PATH "Path to STM32CubeH7 HAL Driver Source folder" FORCE)
-set(st_BSP_lan8742_DIR ${stm32cubeh7_SOURCE_DIR}/Drivers/BSP/Components/lan8742 CACHE PATH "Path to the lan8742 BSP driver" FORCE)
-
-# =====================================================================
-# BSP Library (lan8742 Ethernet PHY driver)
-# =====================================================================
-add_library(bsp STATIC)
-add_library(bsp::bsp ALIAS bsp)
-
-target_sources(bsp
-    PRIVATE
-        ${st_BSP_lan8742_DIR}/lan8742.c
-)
-
-target_include_directories(bsp
-    PRIVATE
-        ${st_BSP_lan8742_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc  # For main.h and other headers
-        ${st_HAL_DRV_INCLUDE_DIR}
-        ${st_HAL_DRV_INCLUDE_LEGACY_DIR}
-        ${st_cmsis_PATH}/Include
-        ${st_cmsis_PATH}/Core/Include
-        ${st_cmsis_PATH}/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include
-)
-
-target_compile_definitions(bsp
-    PRIVATE
-        USE_HAL_DRIVER
-        ${STM32_DEVICE}
-)
 
 # =====================================================================
 # Note: LwIP library removed - using Mongoose network stack instead
+# Note: BSP library (lan8742) removed - Mongoose has built-in STM32H7 ETH driver
 # =====================================================================
 # Nucleo H753 Main Library (HAL + Application)
 # =====================================================================
@@ -141,7 +113,6 @@ target_include_directories(nucleo-h753
         ${CMAKE_SOURCE_DIR}/ao/stack_monitor         # Stack Monitor AO
         ${CMAKE_SOURCE_DIR}/ao/blinky                # Blinky AO
         ${CMAKE_CURRENT_BINARY_DIR}                  # For generated GPIO struct header
-        ${st_BSP_lan8742_DIR}                        # For lan8742.h
         ${st_HAL_DRV_INCLUDE_DIR}
         ${st_HAL_DRV_INCLUDE_LEGACY_DIR}
         ${st_cmsis_PATH}/Include
@@ -149,10 +120,9 @@ target_include_directories(nucleo-h753
         ${st_cmsis_PATH}/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include
 )
 
-# Link with bsp and qpc libraries (using Mongoose, not lwip)
+# Link with qpc library (using Mongoose network stack with built-in STM32H7 driver)
 target_link_libraries(nucleo-h753
     PUBLIC
-        bsp::bsp
         qpc::qpc
 )
 
