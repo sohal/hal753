@@ -1,13 +1,13 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    rng.h
+  * @file    eth.h
   * @brief   This file contains all the function prototypes for
-  *          the rng.c file
+  *          the eth.c file
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2025 STMicroelectronics.
+  * Copyright (c) 2026 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,8 +18,8 @@
   */
 /* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __RNG_H__
-#define __RNG_H__
+#ifndef __ETH_H__
+#define __ETH_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,13 +33,13 @@ extern "C" {
 
 /* USER CODE END Includes */
 
-extern RNG_HandleTypeDef hrng;
+extern ETH_HandleTypeDef heth;
 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
-void MX_RNG_Init(void);
+void MX_ETH_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
@@ -49,5 +49,5 @@ void MX_RNG_Init(void);
 }
 #endif
 
-#endif /* __RNG_H__ */
+#endif /* __ETH_H__ */
 

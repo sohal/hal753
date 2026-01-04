@@ -19,8 +19,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cryp.h"
+#include "eth.h"
 #include "hash.h"
-#include "lwip.h"
 #include "rng.h"
 #include "gpio.h"
 
@@ -100,10 +100,10 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_LWIP_Init();
   MX_CRYP_Init();
   MX_HASH_Init();
   MX_RNG_Init();
+  MX_ETH_Init();
   /* USER CODE BEGIN 2 */
   application_init();
   /* USER CODE END 2 */
