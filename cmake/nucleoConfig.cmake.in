@@ -4,7 +4,7 @@
 include("${CMAKE_CURRENT_LIST_DIR}/nucleoTargets.cmake")
 
 # Set compile definitions for all targets
-set_target_properties(nucleo::h753 PROPERTIES
+set_target_properties(nucleo::nucleo-h753 PROPERTIES
     INTERFACE_COMPILE_DEFINITIONS "USE_HAL_DRIVER"
 )
 
