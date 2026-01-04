@@ -27,6 +27,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "bsp.h"
+#include "../../frameworks/mongoose/mongoose.h"
+
+/* External Mongoose initialization from mongoose_impl.c */
+extern void mongoose_init(void);
 
 /* USER CODE END Includes */
 
@@ -55,13 +60,10 @@
 void SystemClock_Config(void);
 static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
-__attribute__((weak)) void application_init(void)
-{
-  /* Prevent unused argument(s) compilation warning */
-  /* NOTE: This function should not be modified, when the callback is needed,
-           the application_init could be implemented in the user file
-   */
-}
+/* External functions from QP/C framework */
+extern void BSP_paint_stack(void);
+
+/* APPLICATION_INIT is no longer weak - implemented in qpc-adapter.c */
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -77,7 +79,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  /* Paint stack with watermark pattern for usage monitoring */
+  BSP_paint_stack();
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
@@ -107,11 +110,19 @@ int main(void)
   MX_ETH_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  
+  /* Initialize Mongoose network stack */
+  mongoose_init();
+  
+  /* Initialize QP/C framework and start active objects */
+  /* Note: application_init() never returns - QK kernel takes over */
   application_init();
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  /* NOTE: Code below is unreachable - QK kernel runs in application_init() */
   while (1)
   {
     /* USER CODE END WHILE */

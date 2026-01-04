@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.25)
 
+# Include QP/C framework dependency
+include(${PROJECT_SOURCE_DIR}/cmake/deps.qpc.cmake)
+
 # Define paths for STM32CubeH7 components (since we're not building the library)
 set(st_cmsis_PATH ${stm32cubeh7_SOURCE_DIR}/Drivers/CMSIS CACHE PATH "Path to STM32CubeH7 CMSIS folder" FORCE)
 set(st_HAL_Driver_DIR ${stm32cubeh7_SOURCE_DIR}/Drivers/STM32${UPPERCASE_STM32_TYPE}xx_HAL_Driver CACHE PATH "Path to STM32CubeH7 HAL Driver folder" FORCE)
@@ -37,58 +40,7 @@ target_compile_definitions(bsp
 )
 
 # =====================================================================
-# LwIP Library (LwIP middleware sources)
-# =====================================================================
-add_library(lwip STATIC)
-add_library(lwip::lwip ALIAS lwip)
-
-# LwIP core sources
-file(GLOB_RECURSE LWIP_CORE_SOURCES
-    ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/src/core/*.c
-)
-
-# LwIP API sources
-file(GLOB_RECURSE LWIP_API_SOURCES
-    ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/src/api/*.c
-)
-
-# LwIP netif sources
-file(GLOB_RECURSE LWIP_NETIF_SOURCES
-    ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/src/netif/*.c
-)
-
-# LwIP system/OS sources (arch.c, sys_arch.c)
-file(GLOB LWIP_SYSTEM_SOURCES
-    ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/system/OS/*.c
-)
-
-target_sources(lwip
-    PRIVATE
-        ${LWIP_CORE_SOURCES}
-        ${LWIP_API_SOURCES}
-        ${LWIP_NETIF_SOURCES}
-        ${LWIP_SYSTEM_SOURCES}
-)
-
-target_include_directories(lwip
-    PRIVATE
-        ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/src/include
-        ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/system
-        ${CMAKE_CURRENT_SOURCE_DIR}/LWIP/Target  # For lwipopts.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/Core/Inc  # For main.h
-        ${st_HAL_DRV_INCLUDE_DIR}
-        ${st_HAL_DRV_INCLUDE_LEGACY_DIR}
-        ${st_cmsis_PATH}/Include
-        ${st_cmsis_PATH}/Core/Include
-        ${st_cmsis_PATH}/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include
-)
-
-target_compile_definitions(lwip
-    PRIVATE
-        USE_HAL_DRIVER
-        ${STM32_DEVICE}
-)
-
+# Note: LwIP library removed - using Mongoose network stack instead
 # =====================================================================
 # Nucleo H753 Main Library (HAL + Application)
 # =====================================================================
@@ -136,12 +88,32 @@ target_sources(nucleo-h753
         Core/Src/sysmem.c
 )
 
-# LWIP application sources
+# QP/C adapter from frameworks/qpc
 target_sources(nucleo-h753
     PRIVATE
-        LWIP/App/lwip.c
-        LWIP/Target/ethernetif.c
+        ${CMAKE_SOURCE_DIR}/frameworks/qpc/qpc-adapter.c
 )
+
+# Active Objects from ao/ folder
+file(GLOB_RECURSE AO_SOURCES "${CMAKE_SOURCE_DIR}/ao/*/*.c")
+target_sources(nucleo-h753
+    PRIVATE
+        ${AO_SOURCES}
+)
+
+# Mongoose network stack sources from frameworks/mongoose
+file(GLOB MONGOOSE_SOURCES "${CMAKE_SOURCE_DIR}/frameworks/mongoose/*.c")
+target_sources(nucleo-h753
+    PRIVATE
+        ${MONGOOSE_SOURCES}
+)
+
+# LWIP application sources (disabled - using Mongoose instead)
+# target_sources(nucleo-h753
+#     PRIVATE
+#         LWIP/App/lwip.c
+#         LWIP/Target/ethernetif.c
+# )
 
 # Generate GPIO structures from CubeMX main.h
 # NOTE: This utility is not available in cmake_scripts v1.0.7.4
@@ -162,24 +134,26 @@ target_sources(nucleo-h753
 target_include_directories(nucleo-h753
     PRIVATE
         Core/Inc
-        LWIP/App
-        LWIP/Target
-        ${CMAKE_CURRENT_BINARY_DIR}  # For generated GPIO struct header
-        ${st_BSP_lan8742_DIR}  # For lan8742.h
+        ${CMAKE_SOURCE_DIR}/frameworks/qpc           # QP/C adapter
+        ${CMAKE_SOURCE_DIR}/frameworks/mongoose      # Mongoose network stack headers
+        ${CMAKE_SOURCE_DIR}/ao/common                # Common AO headers (bsp.h, signals.h)
+        ${CMAKE_SOURCE_DIR}/ao/mongoose              # Mongoose AO
+        ${CMAKE_SOURCE_DIR}/ao/stack_monitor         # Stack Monitor AO
+        ${CMAKE_SOURCE_DIR}/ao/blinky                # Blinky AO
+        ${CMAKE_CURRENT_BINARY_DIR}                  # For generated GPIO struct header
+        ${st_BSP_lan8742_DIR}                        # For lan8742.h
         ${st_HAL_DRV_INCLUDE_DIR}
         ${st_HAL_DRV_INCLUDE_LEGACY_DIR}
         ${st_cmsis_PATH}/Include
         ${st_cmsis_PATH}/Core/Include
         ${st_cmsis_PATH}/Device/ST/STM32${UPPERCASE_STM32_TYPE}xx/Include
-        ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/src/include
-        ${stm32cubeh7_SOURCE_DIR}/Middlewares/Third_Party/LwIP/system
 )
 
-# Link with bsp and lwip libraries
+# Link with bsp and qpc libraries (using Mongoose, not lwip)
 target_link_libraries(nucleo-h753
     PUBLIC
         bsp::bsp
-        lwip::lwip
+        qpc::qpc
 )
 
 # Set compile definitions on unified target only
