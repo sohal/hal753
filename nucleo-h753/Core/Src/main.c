@@ -27,11 +27,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "bsp.h"
-#include "../../frameworks/mongoose/mongoose.h"
-
-/* External Mongoose initialization from mongoose_impl.c */
-extern void mongoose_init(void);
 
 /* USER CODE END Includes */
 
@@ -61,9 +56,18 @@ void SystemClock_Config(void);
 static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
 /* External functions from QP/C framework */
-extern void BSP_paint_stack(void);
 
-/* APPLICATION_INIT is no longer weak - implemented in qpc-adapter.c */
+/**
+  * @brief  Weak application initialization hook
+  * @note   Override this function to provide custom initialization
+  *         For example, QP/C framework initialization in qpc-adapter.c
+  * @retval None
+  */
+__weak void application_init(void)
+{
+  /* Default: Do nothing - bare metal application */
+  /* Override in downstream project to add RTOS/framework initialization */
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -80,7 +84,6 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   /* Paint stack with watermark pattern for usage monitoring */
-  BSP_paint_stack();
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
@@ -111,8 +114,6 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   
-  /* Initialize Mongoose network stack */
-  mongoose_init();
   
   /* Initialize QP/C framework and start active objects */
   /* Note: application_init() never returns - QK kernel takes over */
