@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(nucleo-hal VERSION @PROJECT_VERSION@)
+project(nucleo-hal VERSION 1.0.5)
 
 # Set CMAKE_PREFIX_PATH to include the lib/cmake directory
 list(PREPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib/cmake")
 
 # Find and include the nucleo package
-find_package(nucleo @PROJECT_VERSION@ REQUIRED)
+find_package(nucleo 1.0.5 REQUIRED)
 
 # Provide convenience variables for downstream projects
 set(NUCLEO_FOUND ${nucleo_FOUND})
@@ -14,31 +14,31 @@ set(NUCLEO_VERSION ${nucleo_VERSION})
 set(NUCLEO_INCLUDE_DIRS ${NUCLEO_INCLUDE_DIRS})
 
 # add targets to downstream
-add_library (qpc-h753 STATIC IMPORTED)
-set_target_properties (qpc-h753 PROPERTIES
-    IMPORTED_LOCATION "${CMAKE_CURRENT_LIST_DIR}/lib/libqpc.a"
+add_library(qpc-h753 INTERFACE)
+set(qpc-h753_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include/qpc/include"
+    "${CMAKE_CURRENT_LIST_DIR}/include/qpc/config"
+    "${CMAKE_CURRENT_LIST_DIR}/include/qpc/port" CACHE PATH "qpc include dirs"
 )
 target_include_directories(qpc-h753 INTERFACE
-    "${CMAKE_CURRENT_LIST_DIR}/include/qpc/include"
-    "${CMAKE_CURRENT_LIST_DIR}/include/qpc/config"
-    "${CMAKE_CURRENT_LIST_DIR}/include/qpc/port"
+    "${qpc-h753_INCLUDE_DIRS}"
 )
+target_link_libraries(qpc-h753 INTERFACE "${CMAKE_CURRENT_LIST_DIR}/lib/libqpc.a")
 
-add_library (hal-h753 STATIC IMPORTED)
-set_target_properties (hal-h753 PROPERTIES
-    IMPORTED_LOCATION "${CMAKE_CURRENT_LIST_DIR}/lib/libnucleo-h753.a"
-)
-target_include_directories(hal-h753 INTERFACE
-    "${CMAKE_CURRENT_LIST_DIR}/include/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc"
+add_library(hal-h753 INTERFACE)
+set(hal-h753_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/include/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc"
     "${CMAKE_CURRENT_LIST_DIR}/include/stm32cubeh7/Drivers/STM32H7xx_HAL_Driver/Inc/Legacy"
     "${CMAKE_CURRENT_LIST_DIR}/include/stm32cubeh7/Drivers/CMSIS/Device/ST/STM32H7xx/Include"
     "${CMAKE_CURRENT_LIST_DIR}/include/stm32cubeh7/Drivers/CMSIS/Include"
     "${CMAKE_CURRENT_LIST_DIR}/include/stm32cubeh7/Drivers/CMSIS/Core/Include"
-    "${CMAKE_CURRENT_LIST_DIR}/include/nucleo"
+    "${CMAKE_CURRENT_LIST_DIR}/include/nucleo" CACHE PATH "hal753 include dirs"
 )
-
+target_include_directories(hal-h753 INTERFACE
+    "${hal-h753_INCLUDE_DIRS}"
+)
+target_link_libraries(hal-h753 INTERFACE "${CMAKE_CURRENT_LIST_DIR}/lib/libnucleo-h753.a")
 
 # Available targets: qpc::qpc, nucleo::h753
 message(STATUS "Nucleo HAL package found: ${NUCLEO_VERSION}")
 message(STATUS "Available targets: qpc::qpc, nucleo::h753")
 message(STATUS "Available imported targets: qpc-h753, hal-h753")
+message(STATUS "Available includes: qpc-h753_INCLUDE_DIRS, hal-h753_INCLUDE_DIRS")
