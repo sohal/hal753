@@ -46,6 +46,8 @@ target_sources(${libName}
         ${st_HAL_DRV_SRC_DIR}/stm32${LOWERCASE_STM32_TYPE}xx_hal_hash_ex.c
         ${st_HAL_DRV_SRC_DIR}/stm32${LOWERCASE_STM32_TYPE}xx_hal_rng.c
         ${st_HAL_DRV_SRC_DIR}/stm32${LOWERCASE_STM32_TYPE}xx_hal_rng_ex.c
+        ${st_HAL_DRV_SRC_DIR}/stm32${LOWERCASE_STM32_TYPE}xx_hal_uart.c
+        ${st_HAL_DRV_SRC_DIR}/stm32${LOWERCASE_STM32_TYPE}xx_hal_uart_ex.c
 )
 
 # Core application sources
@@ -62,8 +64,7 @@ target_sources(${libName}
         Core/Src/stm32h7xx_hal_msp.c
         Core/Src/stm32h7xx_hal_timebase_tim.c
         Core/Src/system_stm32h7xx.c
-        Core/Src/syscalls.c
-        Core/Src/sysmem.c
+        # syscalls.c and sysmem.c intentionally excluded - applications must provide their own
 )
 
 
