@@ -1,7 +1,12 @@
 # CPack configuration for nucleo-hal package
 
 # Determine toolchain identifier
-if(CMAKE_C_COMPILER_ID MATCHES "GNU")
+# Check if TOOLCHAIN_VARIANT is set in environment or cache
+if(DEFINED ENV{TOOLCHAIN_VARIANT})
+    set(TOOLCHAIN_ID "$ENV{TOOLCHAIN_VARIANT}")
+elseif(DEFINED TOOLCHAIN_VARIANT)
+    set(TOOLCHAIN_ID "${TOOLCHAIN_VARIANT}")
+elseif(CMAKE_C_COMPILER_ID MATCHES "GNU")
     if(CMAKE_C_COMPILER_VERSION)
         string(REGEX MATCH "^([0-9]+)\\.([0-9]+)" COMPILER_VER ${CMAKE_C_COMPILER_VERSION})
         set(TOOLCHAIN_ID "gnuarm${CMAKE_MATCH_1}.${CMAKE_MATCH_2}")
