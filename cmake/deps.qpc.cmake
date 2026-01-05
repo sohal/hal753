@@ -37,10 +37,11 @@ if(qpc_ADDED)
         "${qpc_SOURCE_DIR}/src/qk/*.c"
     )
     
-    # Add port-specific sources
+    # Add port-specific sources (exclude syscalls.c - provided by HAL)
     file(GLOB QPC_PORT_SOURCES
         "${QPC_PORT_DIR}/*.c"
     )
+    list(FILTER QPC_PORT_SOURCES EXCLUDE REGEX ".*syscalls\\.c$")
     
     target_sources(${libName}
         PRIVATE
